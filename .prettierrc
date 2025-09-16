@@ -1,4 +1,6 @@
 {
+  "_comment1": "singleQuote: true => Utilise des guillemets simples au lieu de doubles.",
   "singleQuote": true,
+  "_comment2": "semi: true => Ajoute un point-virgule à la fin de chaque ligne.",
   "semi": true
 }

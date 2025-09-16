@@ -1,11 +1,15 @@
 {
+  "_comment1": "env: définit l'environnement d'exécution (ici Node.js et ECMAScript 2021)",
   "env": {
     "node": true,
     "es2021": true
   },
+  "_comment2": "extends: hérite des règles recommandées par ESLint pour un bon style JS",
   "extends": "eslint:recommended",
+  "_comment3": "parserOptions: précise la version de JavaScript utilisée (ici ES12/2021)",
   "parserOptions": {
     "ecmaVersion": 12
   },
+  "_comment4": "rules: permet d'ajouter ou de surcharger des règles personnalisées (vide ici)",
   "rules": {}
 }
