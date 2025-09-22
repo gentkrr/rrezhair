@@ -1,10 +1,14 @@
-import express from "express";
-import mongoose from "mongoose";
-import dotenv from "dotenv";
-import cors from "cors";
+const express = require("express");
+const mongoose = require("mongoose");
+const dotenv = require("dotenv");
+const cors = require("cors");
+const swaggerSetup = require("../swagger");
 
 dotenv.config();
 const app = express();
+
+// Swagger documentation
+swaggerSetup(app);
 
 app.use(cors());
 app.use(express.json());
