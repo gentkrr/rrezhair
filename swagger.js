@@ -1,7 +1,5 @@
 const swaggerJSDoc = require('swagger-jsdoc');
-const swaggerUi = require('swagger-ui-express');
-
-const options = {
+const swaggerUi = require('swagger-ui-express');const options = {
   definition: {
     openapi: '3.0.0',
     info: {
@@ -15,11 +13,8 @@ const options = {
       },
     ],
   },
-  apis: ['./src/routes/*.js'], // Documentation dans les fichiers de routes
-};
-
-const swaggerSpec = swaggerJSDoc(options);
-
+  apis: ['./src/server.js', './src/routes/*.js'], // :danger: chemins relatifs depuis le conteneur
+};const swaggerSpec = swaggerJSDoc(options);// :petit_diamant_bleu: Export d’une fonction qui prend app en paramètre
 module.exports = (app) => {
   app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 };

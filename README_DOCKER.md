@@ -2,11 +2,11 @@
 
 ## Lancer le projet avec Docker
 
-1. Ouvre un terminal à la racine du projet (là où il y a `docker-compose.yml`)
+1. Ouvre un terminal dans le dossier `api/` (là où il y a `docker-compose.yml`)
 2. Lance les conteneurs (API + MongoDB) :
 
 ```bash
-docker-compose up --build
+sudo docker-compose up --build
 ```
 
 - L'API sera dispo sur [http://localhost:3000](http://localhost:3000)
@@ -14,26 +14,66 @@ docker-compose up --build
 
 3. Pour arrêter les conteneurs :
 ```bash
-docker-compose down
+sudo docker-compose down
 ```
 
 ---
 
-## Explications techniques
-
-- **Dockerfile** (dans `/api`) :
-  - Utilise une image Node.js officielle
-  - Installe les dépendances et lance l'API sur le port 3000
-- **docker-compose.yml** :
-  - Lance 2 services :
-    - `mongo` (base de données MongoDB)
-    - `api` (ton backend Node.js)
-  - Les deux services sont sur le même réseau interne Docker
-  - Les données MongoDB sont persistées dans un volume `mongo-data`
-  - Les variables d'environnement sont passées à l'API (PORT, MONGO_URI)
+## Sécurité MongoDB
+- Un utilisateur `root` et un mot de passe (`1234`) sont définis dans le service MongoDB via les variables d'environnement :
+  - `MONGO_INITDB_ROOT_USERNAME=root`
+  - `MONGO_INITDB_ROOT_PASSWORD=1234`
+- L'API se connecte à MongoDB avec cette URI :
+  - `MONGO_URI=mongodb://root:1234@mongo:27017/rrezhair?authSource=admin`
+- Cela évite que n'importe qui puisse accéder à la base sans identification.
 
 ---
 
-## À l'oral :
-- Explique que Docker permet de lancer toute l'appli (API + BDD) en une seule commande, sans rien installer sur la machine à part Docker.
-- Tu peux montrer le Dockerfile et le docker-compose, et expliquer chaque ligne si besoin (voir ci-dessus).
+## Healthcheck Docker
+- Un healthcheck est configuré sur l'API : Docker vérifie régulièrement que l'API répond bien sur `/health`.
+- Si l'API ne répond plus, Docker peut redémarrer automatiquement le conteneur.
+- MongoDB a aussi un healthcheck pour vérifier qu'il est bien prêt.
+
+---
+
+## Explication détaillée du docker-compose.yml
+
+- **mongo** :
+  - Lance une base MongoDB protégée par un mot de passe.
+  - Expose le port 27017 et sauvegarde les données dans un volume Docker.
+  - Healthcheck pour s'assurer que la base répond.
+- **api** :
+  - Construit l'image à partir du Dockerfile du dossier courant.
+  - Expose le port 3000.
+  - Récupère l'URI MongoDB via les variables d'environnement.
+  - Healthcheck sur `/health`.
+  - Dépend du service mongo (attend que la base soit prête).
+
+---
+
+## Commandes à retenir
+
+- **Lancer API + MongoDB** :
+  ```bash
+  sudo docker-compose up --build
+  ```
+- **Arrêter tous les services** :
+  ```bash
+  sudo docker-compose down
+  ```
+- **Lancer l’API seul (hors Docker)** :
+  ```bash
+  npm run dev
+  ```
+- **Installer les dépendances (hors Docker)** :
+  ```bash
+  npm install
+  ```
+
+---
+
+## Bonnes pratiques
+- Toujours utiliser un mot de passe pour MongoDB en production.
+- Utiliser le healthcheck pour surveiller l’état de l’API et de la base.
+- Documenter chaque variable importante et chaque service dans le README.
+
