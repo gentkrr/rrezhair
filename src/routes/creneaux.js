@@ -40,4 +40,110 @@ router.get('/', (req, res) => {
   ]);
 });
 
+/**
+ * @swagger
+ * /api/creneaux:
+ *   post:
+ *     summary: Ajouter un créneau (admin)
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               debut:
+ *                 type: string
+ *                 format: date-time
+ *               fin:
+ *                 type: string
+ *                 format: date-time
+ *               disponible:
+ *                 type: boolean
+ *     responses:
+ *       201:
+ *         description: Créneau créé
+ *       400:
+ *         description: Données invalides
+ *       401:
+ *         description: Non autorisé
+ */
+router.post('/', (req, res) => {
+  // À implémenter
+  res.status(201).json({ message: 'Créneau créé (simulation)' });
+});
+
+/**
+ * @swagger
+ * /api/creneaux/{id}:
+ *   patch:
+ *     summary: Modifier un créneau (admin)
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: ID du créneau
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               debut:
+ *                 type: string
+ *                 format: date-time
+ *               fin:
+ *                 type: string
+ *                 format: date-time
+ *               disponible:
+ *                 type: boolean
+ *     responses:
+ *       200:
+ *         description: Créneau modifié
+ *       400:
+ *         description: Données invalides
+ *       401:
+ *         description: Non autorisé
+ *       404:
+ *         description: Créneau non trouvé
+ */
+router.patch('/:id', (req, res) => {
+  // À implémenter
+  res.json({ message: 'Créneau modifié (simulation)' });
+});
+
+/**
+ * @swagger
+ * /api/creneaux/{id}:
+ *   delete:
+ *     summary: Supprimer un créneau (admin)
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: ID du créneau
+ *     responses:
+ *       200:
+ *         description: Créneau supprimé
+ *       401:
+ *         description: Non autorisé
+ *       404:
+ *         description: Créneau non trouvé
+ */
+router.delete('/:id', (req, res) => {
+  // À implémenter
+  res.json({ message: 'Créneau supprimé (simulation)' });
+});
+
 module.exports = router;

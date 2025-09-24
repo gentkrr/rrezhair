@@ -43,6 +43,8 @@ app.use(express.json());/**
 app.get("/health", (req, res) => {
   res.json({ status: "API en ligne :fusée:" });
 });// Routes API
+const usersRoutes = require('./routes/users');
+app.use('/api/users', usersRoutes);
 const creneauxRoutes = require("./routes/creneaux");
 app.use("/api/creneaux", creneauxRoutes);// MongoDB + lancement
 const PORT = process.env.PORT || 3000;
