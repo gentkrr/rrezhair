@@ -40,3 +40,19 @@ exports.me = async (req, res) => {
     res.status(500).json({ message: 'Erreur serveur', error: err.message });
   }
 };
+
+// Promotion admin protégée par un secret côté serveur
+exports.makeAdmin = async (req, res) => {
+  try {
+    const { email, secret } = req.body || {};
+    if (!email || !secret) return res.status(400).json({ message: 'email et secret requis' });
+    if (secret !== (process.env.ADMIN_SECRET || 'admin-dev-secret')) {
+      return res.status(403).json({ message: 'Secret invalide' });
+    }
+    const user = await User.findOneAndUpdate({ email }, { role: 'admin' }, { new: true });
+    if (!user) return res.status(404).json({ message: 'Utilisateur non trouvé' });
+    res.json({ message: 'Rôle mis à jour', user: { id: user._id, email: user.email, role: user.role } });
+  } catch (err) {
+    res.status(500).json({ message: 'Erreur serveur', error: err.message });
+  }
+};

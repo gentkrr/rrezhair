@@ -70,4 +70,29 @@ router.post('/login', userController.login);
  */
 router.get('/me', auth, userController.me);
 
+/**
+ * @swagger
+ * /api/users/make-admin:
+ *   post:
+ *     summary: Promouvoir un utilisateur en administrateur (protégé par un secret serveur)
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               email:
+ *                 type: string
+ *               secret:
+ *                 type: string
+ *                 description: Secret côté serveur (ADMIN_SECRET)
+ *     responses:
+ *       200:
+ *         description: Rôle mis à jour
+ *       403:
+ *         description: Secret invalide
+ */
+router.post('/make-admin', userController.makeAdmin);
+
 module.exports = router;

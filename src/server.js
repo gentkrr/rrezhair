@@ -19,10 +19,35 @@ const express = require("express");
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 const cors = require("cors");
-const swaggerSetup = require("../swagger");dotenv.config();
-const app = express();// Swagger documentation
+const swaggerSetup = require("../swagger");
+dotenv.config();
+
+const app = express();
+
+// CORS for Expo Web (http://localhost:8081)
+const allowedOrigins = (process.env.CORS_ORIGIN || "*")
+  .split(",")
+  .map((s) => s.trim());
+app.use(
+  cors({
+    origin: allowedOrigins,
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+    allowedHeaders: [
+      "Content-Type",
+      "Authorization",
+      "X-Requested-With",
+      "Accept",
+      "Origin",
+    ],
+  })
+);
+// Note: No explicit app.options wildcard; CORS middleware handles preflight.
+
+// Swagger documentation
 swaggerSetup(app);
-app.use(express.json());/**
+app.use(express.json());
+/**
  * @swagger
  * /health:
  *   get:
@@ -46,7 +71,10 @@ app.get("/health", (req, res) => {
 const usersRoutes = require('./routes/users');
 app.use('/api/users', usersRoutes);
 const creneauxRoutes = require("./routes/creneaux");
-app.use("/api/creneaux", creneauxRoutes);// MongoDB + lancement
+app.use("/api/creneaux", creneauxRoutes);
+const rendezvousRoutes = require("./routes/rendezvous");
+app.use("/api/rendezvous", rendezvousRoutes);
+// MongoDB + lancement
 const PORT = process.env.PORT || 3000;
 mongoose
   .connect(process.env.MONGO_URI)
