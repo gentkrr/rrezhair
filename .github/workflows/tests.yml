@@ -1,0 +1,70 @@
+name: Tests Automatiques
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  test-api:
+    name: Tests API
+    runs-on: ubuntu-latest
+
+    services:
+      mongodb:
+        image: mongo:7
+        env:
+          MONGO_INITDB_ROOT_USERNAME: root
+          MONGO_INITDB_ROOT_PASSWORD: 1234
+        ports:
+          - 27017:27017
+        options: >-
+          --health-cmd "mongosh --eval 'db.adminCommand(\"ping\")'"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+
+      - name: 🟢 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: api/package-lock.json
+
+      - name: 📦 Install dependencies
+        working-directory: ./api
+        run: npm ci
+
+      - name: 🧪 Run tests
+        working-directory: ./api
+        env:
+          MONGO_URI: mongodb://root:1234@localhost:27017/rrezhair_test?authSource=admin
+          JWT_SECRET: test_secret_key
+          NODE_ENV: test
+        run: npm test
+
+      - name: 📊 Generate coverage report
+        working-directory: ./api
+        run: npm run test:coverage
+
+      - name: 📤 Upload coverage to Codecov
+        uses: codecov/codecov-action@v4
+        with:
+          files: ./api/coverage/lcov.info
+          flags: api
+          name: api-coverage
+
+  test-mobile:
+    name: Tests Mobile (à venir)
+    runs-on: ubuntu-latest
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+      
+      - name: ℹ️ Info
+        run: echo "Tests mobile E2E à implémenter avec Detox ou Maestro"
