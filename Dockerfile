@@ -1,5 +1,5 @@
 # Dockerfile simple pour API Node.js
-FROM node:18
+FROM node:22
 
 # Crée le dossier de l'app
 WORKDIR /usr/src/app
