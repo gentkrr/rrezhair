@@ -37,8 +37,8 @@ router.post('/', async (req, res) => {
     if (!creneau.disponible) return res.status(400).json({ message: 'Créneau non disponible' });
 
     const rdv = await RendezVous.create({ creneauId, clientPrenom, clientNom, clientEmail });
-    creneau.disponible = false;
-    await creneau.save();
+   creneau.disponible = false;
+   await creneau.save();
 
     res.status(201).json(rdv);
   } catch (e) {

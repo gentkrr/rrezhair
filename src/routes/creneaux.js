@@ -35,12 +35,28 @@ router.get('/', async (req, res) => {
     const { date } = req.query; // YYYY-MM-DD (optionnel)
     let query = {};
     if (date) {
-      const start = new Date(`${date}T00:00:00.000Z`);
-      const end = new Date(`${date}T23:59:59.999Z`);
-      query = { debut: { $gte: start, $lte: end } };
+      // Utiliser les bornes en heure locale (sans suffixe Z) pour éviter les décalages de fuseau
+      const startLocal = new Date(`${date}T00:00:00`);
+      const endLocal = new Date(`${date}T23:59:59.999`);
+      query = { debut: { $gte: startLocal, $lte: endLocal } };
     }
     const items = await Creneau.find(query).sort({ debut: 1 });
-    res.json(items);
+    const mapped = items.map((x) => {
+      const d1 = new Date(x.debut);
+      const d2 = new Date(x.fin);
+      const dateStr = d1.toISOString().slice(0, 10);
+      const fmt = (d) => d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      return {
+        _id: x._id, // legacy for mobile
+        id: String(x._id), // human-friendly
+        date: dateStr,
+        heure: `${fmt(d1)} - ${fmt(d2)}`,
+        debut: x.debut,
+        fin: x.fin,
+        disponible: x.disponible,
+      };
+    });
+    res.json(mapped);
   } catch (e) {
     res.status(500).json({ message: 'Erreur lors de la récupération des créneaux', error: e.message });
   }
