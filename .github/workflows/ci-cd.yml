@@ -44,10 +44,14 @@ jobs:
         node-version: '18'
     - name: Install dependencies
       run: npm ci
+    - name: Debug Network
+      run: |
+        sudo apt-get install -y netcat
+        nc -zv 127.0.0.1 27017
     - name: Run tests
       run: npm test
       env:
-        MONGO_URI_TEST: mongodb://root:1234@localhost:27017/rrezhair_test?authSource=admin
+        MONGO_URI_TEST: mongodb://root:1234@127.0.0.1:27017/rrezhair_test?authSource=admin
 
   deploy:
     needs: test
