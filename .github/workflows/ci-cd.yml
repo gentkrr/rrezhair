@@ -23,6 +23,14 @@ jobs:
   test:
     runs-on: ubuntu-latest
     needs: build
+    services:
+      mongodb:
+        image: mongo:6
+        ports:
+          - 27017:27017
+        env:
+          MONGO_INITDB_ROOT_USERNAME: root
+          MONGO_INITDB_ROOT_PASSWORD: 1234
     steps:
     - uses: actions/checkout@v3
     - name: Use Node.js
@@ -33,6 +41,8 @@ jobs:
       run: npm ci
     - name: Run tests
       run: npm test
+      env:
+        MONGO_URI_TEST: mongodb://root:1234@localhost:27017/rrezhair_test?authSource=admin
 
   deploy:
     needs: test

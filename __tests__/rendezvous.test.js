@@ -33,7 +33,8 @@ describe('Tests des rendez-vous', () => {
         .send({
           creneauId: String(creneauDisponible._id),
           clientPrenom: 'Jean',
-          clientNom: 'Dupont'
+          clientNom: 'Dupont',
+          clientEmail: 'jean.dupont@example.com'
         });
 
       if (res.status !== 201) {
@@ -95,12 +96,14 @@ describe('Tests des rendez-vous', () => {
           creneauId: creneauDisponible._id,
           clientPrenom: 'Jean',
           clientNom: 'Dupont',
+          clientEmail: 'jean.dupont@example.com',
           statut: 'CONFIRME'
         },
         {
           creneauId: creneauIndisponible._id,
           clientPrenom: 'Marie',
           clientNom: 'Martin',
+          clientEmail: 'marie.martin@example.com',
           statut: 'ANNULE'
         }
       ]);
@@ -135,6 +138,7 @@ describe('Tests des rendez-vous', () => {
         creneauId: creneauIndisponible._id,
         clientPrenom: 'Jean',
         clientNom: 'Dupont',
+        clientEmail: 'jean.dupont@example.com',
         statut: 'CONFIRME'
       });
     });
@@ -163,7 +167,7 @@ describe('Tests des rendez-vous', () => {
       // Annuler une première fois
       const res1 = await request(app).patch(`/api/rendezvous/${rdv._id}/cancel`);
       expect(res1.status).toBe(200);
-      
+
       // Annuler une deuxième fois (idempotent)
       const res2 = await request(app).patch(`/api/rendezvous/${rdv._id}/cancel`);
       expect(res2.status).toBe(200);
