@@ -36,9 +36,14 @@ router.post('/', async (req, res) => {
     if (!creneau) return res.status(400).json({ message: 'Créneau introuvable' });
     if (!creneau.disponible) return res.status(400).json({ message: 'Créneau non disponible' });
 
+    // Check if slot is in the past
+    if (new Date(creneau.debut) < new Date()) {
+      return res.status(400).json({ message: 'Impossible de réserver un créneau passé' });
+    }
+
     const rdv = await RendezVous.create({ creneauId, clientPrenom, clientNom, clientEmail });
-   creneau.disponible = false;
-   await creneau.save();
+    creneau.disponible = false;
+    await creneau.save();
 
     res.status(201).json(rdv);
   } catch (e) {

@@ -18,17 +18,32 @@ services:
   api:
     build: .
     ports:
-      - "3000:3000"
+      - "8082:3000"
     environment:
       - PORT=3000
       - MONGO_URI=mongodb://root:1234@mongo:27017/rrezhair?authSource=admin
-      - CORS_ORIGIN=http://localhost:8081
+      - CORS_ORIGIN=http://localhost:5173,http://localhost:8081
     depends_on:
       - mongo
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:3000/health"]
+      test: [ "CMD", "curl", "-f", "http://localhost:3000/api/health" ]
       interval: 30s
       timeout: 10s
       retries: 5
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+
+  client:
+    build: ./client
+    ports:
+      - "5173:5173"
+    environment:
+      - VITE_API_URL=http://localhost:8082
+    depends_on:
+      - api
+    volumes:
+      - ./client:/app
+      - /app/node_modules
 volumes:
   mongo-data:

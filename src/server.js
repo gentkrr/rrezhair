@@ -67,13 +67,25 @@ app.use(express.json());
  */
 app.get("/health", (req, res) => {
   res.json({ status: "API en ligne :fusée:" });
-});// Routes API
+});
+
+// Route santé pour le frontend (legacy support)
+app.get("/api/health", (req, res) => {
+  res.json({ status: "API en ligne 🚀" });
+});
+
+// Routes API
 const usersRoutes = require('./routes/users');
 app.use('/api/users', usersRoutes);
 const creneauxRoutes = require("./routes/creneaux");
 app.use("/api/creneaux", creneauxRoutes);
 const rendezvousRoutes = require("./routes/rendezvous");
 app.use("/api/rendezvous", rendezvousRoutes);
+
+// Root route
+app.get("/", (req, res) => {
+  res.json({ message: "Bienvenue sur l'API Rrez'hair ! 💇‍♂️" });
+});
 // MongoDB + lancement
 const PORT = process.env.PORT || 3000;
 mongoose

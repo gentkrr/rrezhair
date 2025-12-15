@@ -1,20 +1,28 @@
 // models/RendezVous.js
 const mongoose = require('mongoose');
 
-const rendezVousSchema = new mongoose.Schema(
-  {
-    creneauId: { type: mongoose.Schema.Types.ObjectId, ref: 'Creneau', required: true },
-    statut: {
-      type: String,
-      enum: ['CONFIRME', 'ANNULE'],
-      default: 'CONFIRME',
-    },
-    // Optionnel: infos client si pas d'auth
-    clientPrenom: { type: String },
-    clientNom: { type: String },
-    clientEmail: { type: String },
+const rendezVousSchema = new mongoose.Schema({
+  creneauId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Creneau',
+    required: true
   },
-  { timestamps: true }
-);
+  clientPrenom: {
+    type: String,
+    required: true
+  },
+  clientNom: {
+    type: String,
+    required: true
+  },
+  clientEmail: {
+    type: String,
+    required: true
+  },
+  dateCreation: {
+    type: Date,
+    default: Date.now
+  }
+});
 
 module.exports = mongoose.model('RendezVous', rendezVousSchema);
