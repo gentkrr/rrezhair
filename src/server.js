@@ -95,4 +95,7 @@ mongoose
       console.log(`:fusée: API lancée sur http://localhost:${PORT}`)
     );
   })
-  .catch((err) => console.error(":x: Erreur MongoDB :", err));
+  .catch((err) => {
+    console.error(":x: Erreur MongoDB :", err);
+    process.exit(1);
+  });
