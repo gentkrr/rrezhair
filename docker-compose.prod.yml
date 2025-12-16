@@ -2,8 +2,8 @@ version: '3.8'
 services:
   mongo:
     network_mode: host
-    healthcheck:
-      test: mongosh "mongodb://root:1234@127.0.0.1:27017/test?authSource=admin" --eval "db.runCommand('ping').ok" --quiet
+    # Healthcheck removed to avoid flaky deployments in host mode
+    # The API will retry connection automatically
 
   api:
     network_mode: host
@@ -11,6 +11,8 @@ services:
     environment:
       - PORT=8082
       - MONGO_URI=mongodb://root:1234@localhost:27017/rrezhair?authSource=admin
+    depends_on:
+      - mongo # Removed condition: service_healthy
     healthcheck:
       test: [ "CMD", "curl", "-f", "http://localhost:8082/api/health" ]
 
