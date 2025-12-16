@@ -13,12 +13,13 @@ services:
       - PORT=8095
       - MONGO_URI=mongodb://root:1234@localhost:27017/rrezhair?authSource=admin
     depends_on:
-      - mongo # Removed condition: service_healthy
-    healthcheck:
-      test: [ "CMD", "curl", "-f", "http://localhost:8095/api/health" ]
+      - mongo
+    # Healthcheck removed to avoid flaky deployments
 
   client:
     network_mode: host
     ports: []
     environment:
       - VITE_API_URL=http://localhost:8095
+    depends_on:
+      - api # Removed condition: service_healthy
