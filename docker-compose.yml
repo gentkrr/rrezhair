@@ -3,8 +3,7 @@ services:
   mongo:
     image: mongo:6
     restart: always
-    ports:
-      - "27017:27017"
+    network_mode: host
     volumes:
       - mongo-data:/data/db
     environment:
@@ -17,17 +16,16 @@ services:
       retries: 5
   api:
     build: .
-    ports:
-      - "8082:3000"
+    network_mode: host
     environment:
-      - PORT=3000
-      - MONGO_URI=mongodb://root:1234@mongo:27017/rrezhair?authSource=admin
+      - PORT=8082
+      - MONGO_URI=mongodb://root:1234@localhost:27017/rrezhair?authSource=admin
       - CORS_ORIGIN=http://localhost:5173,http://localhost:8081
     depends_on:
       mongo:
         condition: service_healthy
     healthcheck:
-      test: [ "CMD", "curl", "-f", "http://localhost:3000/api/health" ]
+      test: [ "CMD", "curl", "-f", "http://localhost:8082/api/health" ]
       interval: 30s
       timeout: 10s
       retries: 5
@@ -37,8 +35,7 @@ services:
 
   client:
     build: ./client
-    ports:
-      - "5173:5173"
+    network_mode: host
     environment:
       - VITE_API_URL=http://localhost:8082
     depends_on:
