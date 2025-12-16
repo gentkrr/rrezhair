@@ -2,7 +2,8 @@ version: '3.8'
 services:
   mongo:
     network_mode: host
-    ports: [] # Disable port mapping since we use host network
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongosh 127.0.0.1:27017/test --quiet
 
   api:
     network_mode: host
