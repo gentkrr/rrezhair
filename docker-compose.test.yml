@@ -1,0 +1,8 @@
+version: '3.8'
+services:
+  api:
+    command: npm test
+    environment:
+      - MONGO_URI_TEST=mongodb://root:1234@mongo:27017/rrezhair_test?authSource=admin
+    healthcheck:
+      disable: true
