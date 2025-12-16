@@ -24,7 +24,8 @@ services:
       - MONGO_URI=mongodb://root:1234@mongo:27017/rrezhair?authSource=admin
       - CORS_ORIGIN=http://localhost:5173,http://localhost:8081
     depends_on:
-      - mongo
+      mongo:
+        condition: service_healthy
     healthcheck:
       test: [ "CMD", "curl", "-f", "http://localhost:3000/api/health" ]
       interval: 30s
@@ -41,7 +42,8 @@ services:
     environment:
       - VITE_API_URL=http://localhost:8082
     depends_on:
-      - api
+      api:
+        condition: service_healthy
     volumes:
       - ./client:/app
       - /app/node_modules
