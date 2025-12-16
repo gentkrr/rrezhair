@@ -31,7 +31,7 @@ jobs:
     
     - name: Deploy with Docker Compose
       run: |
-        cd ~/rrezhair
+        cd ~/Bureau/rrezhair
         git pull origin main
         docker compose down
         docker compose up -d --build
