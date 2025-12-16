@@ -3,7 +3,7 @@ services:
   mongo:
     network_mode: host
     healthcheck:
-      test: echo 'db.runCommand("ping").ok' | mongosh 127.0.0.1:27017/test --quiet
+      test: mongosh "mongodb://root:1234@127.0.0.1:27017/test?authSource=admin" --eval "db.runCommand('ping').ok" --quiet
 
   api:
     network_mode: host
