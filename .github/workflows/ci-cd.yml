@@ -34,6 +34,8 @@ jobs:
         username: ${{ secrets.SERVER_USER }}
         key: ${{ secrets.SSH_PRIVATE_KEY }}
         script: |
+          pwd
+          ls -la
           cd rrezhair
           git pull origin main
           docker compose down
