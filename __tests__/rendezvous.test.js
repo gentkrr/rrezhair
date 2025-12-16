@@ -14,14 +14,14 @@ describe('Tests des rendez-vous', () => {
 
   beforeEach(async () => {
     creneauDisponible = await Creneau.create({
-      debut: new Date('2025-10-27T09:00:00.000Z'),
-      fin: new Date('2025-10-27T09:30:00.000Z'),
+      debut: new Date('2026-10-27T09:00:00.000Z'),
+      fin: new Date('2026-10-27T09:30:00.000Z'),
       disponible: true
     });
 
     creneauIndisponible = await Creneau.create({
-      debut: new Date('2025-10-27T10:00:00.000Z'),
-      fin: new Date('2025-10-27T10:30:00.000Z'),
+      debut: new Date('2026-10-27T10:00:00.000Z'),
+      fin: new Date('2026-10-27T10:30:00.000Z'),
       disponible: false
     });
   });

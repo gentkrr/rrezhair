@@ -22,6 +22,11 @@ const rendezVousSchema = new mongoose.Schema({
   dateCreation: {
     type: Date,
     default: Date.now
+  },
+  statut: {
+    type: String,
+    enum: ['CONFIRME', 'ANNULE'],
+    default: 'CONFIRME'
   }
 });
 
